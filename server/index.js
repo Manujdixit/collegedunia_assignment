@@ -14,6 +14,7 @@ const conn = async () => {
     console.log(err);
   }
 };
+
 conn();
 
 app.listen(port, () => {

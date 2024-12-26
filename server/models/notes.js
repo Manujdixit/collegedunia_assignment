@@ -17,7 +17,8 @@ const NotesSchema = new Schema(
     },
     category: {
       type: String,
-      default: "General",
+      default: "",
+      enum: ["General", "Work", "Personal", "Shopping", "Others"],
     },
   },
   { timestamps: true }
