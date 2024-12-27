@@ -41,3 +41,21 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, about} = req.body;
+    const user = req.user;
+
+   
+    user.name = name || user.name;
+    user.about = about || user.about;
+
+    await user.save();
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    res.json({ user, token });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
