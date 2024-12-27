@@ -1,5 +1,7 @@
 # Notes App
 
+## Watch live preview- https://collegedunia-assignment-beta.vercel.app/
+
 A full-stack notes application built with React, Node.js, and MongoDB.
 
 ## Prerequisites
