@@ -6,8 +6,16 @@ interface ThemeState {
   theme: Theme;
 }
 
+// Initialize theme from localStorage and apply it to document
+const getInitialTheme = (): Theme => {
+  const savedTheme = localStorage.getItem('theme') as Theme || 'dark';
+  document.documentElement.classList.remove('light', 'dark');
+  document.documentElement.classList.add(savedTheme);
+  return savedTheme;
+};
+
 const initialState: ThemeState = {
-  theme: (localStorage.getItem('theme') as Theme) || 'dark',
+  theme: getInitialTheme(),
 };
 
 const themeSlice = createSlice({
@@ -15,10 +23,11 @@ const themeSlice = createSlice({
   initialState,
   reducers: {
     toggleTheme: (state) => {
-      state.theme = state.theme === 'light' ? 'dark' : 'light';
-      localStorage.setItem('theme', state.theme);
+      const newTheme = state.theme === 'light' ? 'dark' : 'light';
+      state.theme = newTheme;
+      localStorage.setItem('theme', newTheme);
       document.documentElement.classList.remove('light', 'dark');
-      document.documentElement.classList.add(state.theme);
+      document.documentElement.classList.add(newTheme);
     },
   },
 });
