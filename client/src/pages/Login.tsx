@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/services/api';
+import { useAppDispatch } from '@/store/hooks';
+import { login } from '@/store/slices/authSlice';
+
 export default function Login() {
   const [email, setEmail] = useState('testuser@gmail.com');
   const [password, setPassword] = useState('Test@1234');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const data = await api.auth.login(email, password);
       if (data.token) {
-        login(data.token, data.user);
+        dispatch(login({ token: data.token, user: data.user }));
         navigate('/');
       } else {
         setError(data.message);

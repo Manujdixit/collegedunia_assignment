@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
 import { api } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAppDispatch } from '@/store/hooks';
+import { login } from '@/store/slices/authSlice';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -11,7 +12,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ export default function Register() {
     try {
       const response = await api.auth.register(name, email, password);
       if (response.token && response.user) {
-        login(response.token, response.user);
+        dispatch(login({ token: response.token, user: response.user }));
         navigate('/');
       } else {
         setError(response.message || 'Registration failed');

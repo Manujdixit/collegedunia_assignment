@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
 import { api } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { login } from '@/store/slices/authSlice';
 
 export default function Profile() {
-  const { user, token, login } = useAuth();
+  const dispatch = useAppDispatch();
+  const { user, token } = useAppSelector(state => state.auth);
   const [name, setName] = useState(user?.name || '');
   const [about, setAbout] = useState(user?.about || '');
 
@@ -32,7 +34,7 @@ export default function Profile() {
       });
 
       if (response.user) {
-        login(token, response.user);
+        dispatch(login({ token, user: response.user }));
         setSuccess('Profile updated successfully');
       } else {
         setError(response.message || 'Failed to update profile');

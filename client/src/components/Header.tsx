@@ -1,8 +1,9 @@
 import { Moon, Sun, LogOut, User } from "lucide-react";
 import { Button } from "./ui/button";
-import { useTheme } from '@/context/ThemeContext';
-import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { logout } from "@/store/slices/authSlice";
+import { toggleTheme } from "@/store/slices/themeSlice";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,12 +13,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function Header() {
-  const { theme, toggleTheme } = useTheme();
-  const { user, logout } = useAuth();
+  const { theme } = useAppSelector(state => state.theme);
+  const { user } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    dispatch(logout());
     navigate('/login');
   };
 
@@ -26,7 +28,7 @@ export default function Header() {
       <Button
         variant="ghost"
         size="icon"
-        onClick={toggleTheme}
+        onClick={() => dispatch(toggleTheme())}
         className="hover:bg-neutral-100 dark:hover:bg-neutral-800 dark:text-neutral-100 transition-colors"
         aria-label="Toggle theme"
       >
@@ -42,7 +44,7 @@ export default function Header() {
             </span>
             <span className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full border-2 border-white dark:border-neutral-950" />
           </div>
-          <span className="dark:text-white mr-4">{user.name}</span>
+          <span className="dark:text-white mr-4">{user?.name}</span>
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -57,6 +59,6 @@ export default function Header() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-    </div >
+    </div>
   );
 }

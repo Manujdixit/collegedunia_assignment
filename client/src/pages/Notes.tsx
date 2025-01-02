@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useAuth } from '@/context/AuthContext';
 import { api } from '@/services/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, X,  Trash2, Pencil } from 'lucide-react';
+import { Plus, X, Trash2, Pencil } from 'lucide-react';
 import Loading from '@/components/Loading';
+import { useAppSelector } from '@/store/hooks';
 
 interface Note {
   _id: string;
@@ -20,7 +20,7 @@ export default function Notes() {
   const [category, setCategory] = useState('General');
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const { token } = useAuth();
+  const { token } = useAppSelector(state => state.auth);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [isLoading, setIsLoading] = useState(true);
